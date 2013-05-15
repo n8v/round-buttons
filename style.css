@@ -1,0 +1,13 @@
+body {
+   font-family: helvetica, sans-serif;
+   margin: 4em;
+}
+
+textarea#namefield {
+   font-family: helvetica, sans-serif;
+   font-size: 18pt;
+}
+
+footer {
+   font-size: .8em;
+}
