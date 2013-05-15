@@ -30,3 +30,30 @@ doc.setDrawColor(0);
 doc.setFillColor(255,0,0);
 */
  
+
+
+var PDFstring = doc.output('datauristring');
+$('.preview-pane').attr('src', PDFstring);
+
+
+// var initDownloadPDF = function() {
+//     $('.download-pdf').click(function(){
+// 	// eval(editor.getValue());
+
+// 	// var file = demos[$('#template').val()];
+// 	// if (file === undefined) {
+// 	//     file = 'demo';
+// 	// }
+// 	var file = 'buttons';
+// 	doc.save(file + '.pdf');
+//     });
+//     return false;
+// };
+
+$(document).ready(function() {
+    $('.download-pdf').click(function(){
+	doc.save('name-buttons.pdf');
+    });
+
+
+});
