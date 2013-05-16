@@ -71,8 +71,8 @@ function drawButtonPDF () {
 
 function drawName (centerx, centery, n) {
 
-    var max_size = 36;
-    var min_size = 24;
+    var max_size = 30;
+    var min_size = 18;
     var max_lines = 3;
 
     doc.setFontSize(max_size);
@@ -81,8 +81,8 @@ function drawName (centerx, centery, n) {
    // var last_name = names[-1];
 
     var max_middle_line_width_in_pts =  (circle_radius - circle_margin * 2) * 2 * ppi;
-    var max_twolines_width = max_middle_line_width_in_pts * .9;
-    var max_thirdlines_width = max_middle_line_width_in_pts * .75;
+    var max_twolines_width = max_middle_line_width_in_pts * .95;
+    var max_thirdlines_width = max_middle_line_width_in_pts * .9;
 
     // var lines = doc.splitTextToSize(n, max_middle_line_width, {});
     // doc.text(centerx, centery, lines);
@@ -126,21 +126,21 @@ function drawName (centerx, centery, n) {
 
 
     	// Try three lines
-	lines[2] = lines[1];
-	var split_top_line = lines[0].split(/ /);
+	if (lines[0].indexOf(' ') > -1) {
+	    lines[2] = lines[1];
+	    var split_top_line = lines[0].split(/ /);
 
-	lines[0] = split_top_line.slice(0, split_top_line.length - 1).join(' ');
-	lines[1] = split_top_line[split_top_line.length - 1];
-    	if (doc.getStringUnitWidth(lines[0]) * found_size <= max_thirdlines_width &&
-	    doc.getStringUnitWidth(lines[1]) * found_size <= max_middle_line_width_in_pts &&
-	    doc.getStringUnitWidth(lines[2]) * found_size <= max_thirdlines_width 
-	   ) {
-    	    found_fit = true;
-    	    console.log('Found ', lines, ' fits in two lines at ', found_size, ' pts');
-	    break;
-    	}
-
-	// Try three with dashbreaking
+	    lines[0] = split_top_line.slice(0, split_top_line.length - 1).join(' ');
+	    lines[1] = split_top_line[split_top_line.length - 1];
+    	    if (doc.getStringUnitWidth(lines[0]) * found_size <= max_thirdlines_width &&
+		doc.getStringUnitWidth(lines[1]) * found_size <= max_middle_line_width_in_pts &&
+		doc.getStringUnitWidth(lines[2]) * found_size <= max_thirdlines_width 
+	       ) {
+    		found_fit = true;
+    		console.log('Found ', lines, ' fits in three lines at ', found_size, ' pts');
+		break;
+    	    }
+	}
 
     	// Try making it smaller
     	found_size--;
@@ -153,7 +153,10 @@ function drawName (centerx, centery, n) {
     	var xoffset = 0 - (doc.getStringUnitWidth(lines[i]) * found_size/ppi / 2);
 
 	// .67 because the full height includes descenders which should drop below center.
-    	var yoffset = (line_height_in * .67) * lines.length/ 2 - (lines.length - 1 - i) * line_height_in;
+	var textheight = (lines.length * found_size + (lines.length - 1) * leading_pts)/ppi;
+
+//    	var yoffset = (line_height_in * .67) * lines.length/ 2 - (lines.length - 1 - i) * line_height_in;
+    	var yoffset = 0 + (found_size/ppi * .6) - textheight / 2 + i * line_height_in;
     	doc.setFontSize(found_size);
     	// console.log('offsetting ', n, ' by ', xoffset, 'in from ', centerx);
     	doc.text(centerx + xoffset, centery + yoffset, lines[i]);
