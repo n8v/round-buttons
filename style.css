@@ -6,7 +6,9 @@ body {
 textarea#namefield {
    font-family: helvetica, sans-serif;
    font-size: 18pt;
+   line-height: 22pt;
    width: 45%;
+   max-width: 550;
 }
 
 footer {
@@ -16,4 +18,21 @@ footer {
 .preview-container {
    width: 45%;
    /* height: 550; */
+   max-width: 550;
+
+}
+
+.download-pdf {
+   padding: 14px;
+}
+
+
+@media only screen and (max-width: 767px) {
+   .preview-container {
+      width: 95%;
+   }   
+   textarea#namefield {
+      width: 95%;
+   }
+
 }

@@ -4,6 +4,12 @@
 		<meta charset="utf-8">
 		<title>Printable name badges</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- Bootstrap -->
+		<link href="jsPDF/examples/bootstrap/css/bootstrap.css" rel="stylesheet">
+		<link href="jsPDF/examples/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+
+
 		<link href="style.css" rel="stylesheet">
 
 		<!-- See closing body for JS -->
@@ -12,16 +18,21 @@
 	<body>
 
 
-<h1>Printable Name Badges</h1>
+<h1>Round Name Badge Maker</h1>
+
+<p>Your browser will remember whatever you type in the list of names, but it is not sent or stored anywhere else.</p>
 
 				<div class="preview-container" style="float: right">
-					<iframe class="preview-pane" width="100%" height="550" frameborder="0"></iframe>
+<br><br>
+<p>Live preview:</p>
+					<iframe class="preview-pane" width="100%" height="450" frameborder="0"></iframe>
+					<a href="#" class="btn btn-primary download-pdf" >Download the PDF to print</a>
 				</div>
 
-				<a href="#" class="btn btn-primary download-pdf" >Download PDF</a>
 
+<br><br>
 <form id=f name=namesForm>
-<label for=namefield>List the names you want on the badges, one per line:</label><br>
+<label for=namefield>List the <strong>names you want on the badges</strong>, one per line:</label><br>
 <textarea id=namefield cols=25 rows=20>
 Phil Keaggy
 Allison Krauss
