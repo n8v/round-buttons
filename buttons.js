@@ -36,8 +36,11 @@ function drawButtonPDF () {
 	    for (var j=0; j < maxcols; j++) {
 		var x = marginsides + circle_radius +
 		    (j * (circle_radius*2 + gutter) );
-		
-	//	doc.addImage(logo, 'JPEG', x - circle_radius, y - circle_radius, 2.5, 2.5); 
+	
+		// if (i==0) {
+		doc.addImage(logo, 'JPEG', x - circle_radius, y - circle_radius, 2.5, 2.5); 
+//		doc.addSVG(logosvg,  x - circle_radius, y - circle_radius, 2.5, 2.5); 
+		// }
 		doc.circle(x, y, circle_radius);
 		var n = '';
 		if (n = names.shift()) {
