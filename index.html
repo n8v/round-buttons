@@ -7,6 +7,7 @@
 		<link href="style.css" rel="stylesheet">
 
 		<!-- See closing body for JS -->
+		<script type="text/javascript">var doc = []</script>
 	</head>
 	<body>
 
@@ -17,13 +18,25 @@
 					<iframe class="preview-pane" width="100%" height="650" frameborder="0"></iframe>
 				</div>
 
-						<a href="#" class="btn btn-primary download-pdf">Download PDF</a>
+				<a href="#" class="btn btn-primary download-pdf" >Download PDF</a>
 
-<form id=f>
+<form id=f name=namesForm>
 <label for=namefield>List the names you want on the badges, one per line:</label><br>
-<textarea id=namefield cols=20 rows=20>
+<textarea id=namefield cols=25 rows=20>
 Phil Keaggy
 Allison Krauss
+Yo Yo Ma
+Zuill Bailley
+Sufjan Stevens
+Madeleine Johnson-Johnson
+Nathaniel Smith
+Jeremy Kittel
+Josh Garrels
+Vienna Teng
+Aaron Sprinkle
+Nick Barber
+Kelly Joe Phelps
+Lightning Hopkins
 </textarea>
 </form>
 
@@ -39,20 +52,20 @@ Thanks to <a href=http://http://jspdf.com/#>James Hall for jspdf.com</a>.
 
 
 		<!-- Scripts in development mode -->
-		<script type="text/javascript" src="lib/jspdf.min.js"></script>
-		<!-- <script type="text/javascript" src="lib/libs/FileSaver.js/FileSaver.js"></script> -->
-		<!-- <script type="text/javascript" src="lib/libs/Blob.js/Blob.js"></script> -->
-		<!-- <script type="text/javascript" src="lib/libs/Blob.js/BlobBuilder.js"></script> -->
+		<script type="text/javascript" src="jsPDF/jspdf.js"></script>
+		<script type="text/javascript" src="jsPDF/libs/FileSaver.js/FileSaver.js"></script>
+		<script type="text/javascript" src="jsPDF/libs/Blob.js/Blob.js"></script>
+		<script type="text/javascript" src="jsPDF/libs/Blob.js/BlobBuilder.js"></script>
 
-		<!-- <script type="text/javascript" src="lib/libs/Deflate/deflate.js"></script> -->
-		<!-- <script type="text/javascript" src="lib/libs/Deflate/adler32cs.js"></script> -->
+		<script type="text/javascript" src="jsPDF/libs/Deflate/deflate.js"></script>
+		<script type="text/javascript" src="jsPDF/libs/Deflate/adler32cs.js"></script>
 
-		<script type="text/javascript" src="lib/jspdf.plugin.addimage.js"></script>
-		<!-- <script type="text/javascript" src="lib/jspdf.plugin.from_html.js"></script> -->
-		<script type="text/javascript" src="lib/jspdf.plugin.ie_below_9_shim.js"></script>
-		<!-- <script type="text/javascript" src="lib/jspdf.plugin.sillysvgrenderer.js"></script> -->
-		<script type="text/javascript" src="lib/jspdf.plugin.split_text_to_size.js"></script>
-		<script type="text/javascript" src="lib/jspdf.plugin.standard_fonts_metrics.js"></script>
+		<script type="text/javascript" src="jsPDF/jspdf.plugin.addimage.js"></script>
+		<!-- <script type="text/javascript" src="jsPDF/jspdf.plugin.from_html.js"></script> -->
+		<!-- <script type="text/javascript" src="jsPDF/jspdf.plugin.ie_below_9_shim.js"></script> -->
+		<!-- <script type="text/javascript" src="jsPDF/jspdf.plugin.sillysvgrenderer.js"></script> -->
+		<script type="text/javascript" src="jsPDF/jspdf.plugin.split_text_to_size.js"></script>
+		<script type="text/javascript" src="jsPDF/jspdf.plugin.standard_fonts_metrics.js"></script>
 
 
 		<script type="text/javascript" src="logo.js"></script>
