@@ -38,13 +38,14 @@ function drawButtonPDF () {
 		    (j * (circle_radius*2 + gutter) );
 	
 		// if (i==0) {
-		doc.addImage(logo, 'JPEG', x - circle_radius, y - circle_radius, 2.5, 2.5); 
+		if (!logo) console.error("nothing in global `logo` var!");
+	//	doc.addImage(logo, 'JPEG', x - circle_radius, y - circle_radius, 2.5, 2.5); 
 //		doc.addSVG(logosvg,  x - circle_radius, y - circle_radius, 2.5, 2.5); 
 		// }
 		doc.circle(x, y, circle_radius);
 		var n = '';
 		if (n = names.shift()) {
-		    doc.text(x - circle_radius + circle_margin ,y,n);
+		    drawName(x - circle_radius + circle_margin,  y,n);
 		}
 	    }
 	}
@@ -56,6 +57,12 @@ function drawButtonPDF () {
 
 
 }
+
+
+function drawName (centerx, centery, n) {
+    doc.text(centerx, centery, n);
+}
+
 
 drawButtonPDF();
 var PDFstring = doc.output('datauristring');
