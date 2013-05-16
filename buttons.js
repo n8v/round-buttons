@@ -1,18 +1,20 @@
+var doc = [];
 
-var doc;
+var margintop = .25;
+var marginsides = .25;
+var gutter = .15;
+var maxrows = 4;
+var maxcols = 3;
+
+var circle_radius = 2.5/2;
+var circle_margin = .25;
+    
+var ppi = 72;
 
 function drawButtonPDF () {
     doc = new jsPDF('portrait', 'in', 'letter');
-    var margintop = .25;
-    var marginsides = .25;
-    var gutter = .15;
-    var maxrows = 4;
-    var maxcols = 3;
     
-    var circle_radius = 2.5/2;
-    var circle_margin = .25;
-    
-    
+
     var names = $('#namefield').val().split("\n");
 
     // http://stackoverflow.com/questions/281264/remove-empty-elements-from-an-array-in-javascript
@@ -26,26 +28,34 @@ function drawButtonPDF () {
 
     var buttons_per_page = maxrows * maxcols;
 
-    doc.setFontSize(24);
+
+    doc.setFont('Helvetica', '');
+
 
     while (names.length) {
 	doc.setLineWidth(.01);
 	for (var i=0; i < maxrows; i++) {
 	    var y = margintop + circle_radius +
-		(i * (circle_radius*2 + gutter) );
+	    	(i * (circle_radius*2 + gutter) );
+
 	    for (var j=0; j < maxcols; j++) {
 		var x = marginsides + circle_radius +
 		    (j * (circle_radius*2 + gutter) );
 	
-		// if (i==0) {
-		if (!logo) console.error("nothing in global `logo` var!");
-	//	doc.addImage(logo, 'JPEG', x - circle_radius, y - circle_radius, 2.5, 2.5); 
-//		doc.addSVG(logosvg,  x - circle_radius, y - circle_radius, 2.5, 2.5); 
-		// }
+// 		// if (i==0) {
+// 		// if (!logo) console.error("nothing in global `logo` var!");
+// 	//	doc.addImage(logo, 'JPEG', x - circle_radius, y - circle_radius, 2.5, 2.5); 
+// //		doc.addSVG(logosvg,  x - circle_radius, y - circle_radius, 2.5, 2.5); 
+// 		// }
+
+
 		doc.circle(x, y, circle_radius);
+
+
+
 		var n = '';
 		if (n = names.shift()) {
-		    drawName(x - circle_radius + circle_margin,  y,n);
+		    drawName(x, y, n);
 		}
 	    }
 	}
@@ -60,29 +70,101 @@ function drawButtonPDF () {
 
 
 function drawName (centerx, centery, n) {
-    doc.text(centerx, centery, n);
+
+    var max_size = 36;
+    var min_size = 24;
+    var max_lines = 3;
+
+    doc.setFontSize(max_size);
+
+    var names = n.split(/\s+/);
+   // var last_name = names[-1];
+
+    var max_middle_line_width_in_pts =  (circle_radius - circle_margin * 2) * 2 * ppi;
+    var max_twolines_width = max_middle_line_width_in_pts * .9;
+    var max_thirdlines_width = max_middle_line_width_in_pts * .75;
+
+    // var lines = doc.splitTextToSize(n, max_middle_line_width, {});
+    // doc.text(centerx, centery, lines);
+
+    var found_fit = false;
+    var found_size = max_size;
+    var lines = [];
+
+    while (!found_fit && found_size >= min_size) {
+    	// Try it on one line
+    	lines = [n];
+    	if (doc.getStringUnitWidth(lines[0]) * found_size <= max_middle_line_width_in_pts) {
+    	    found_fit = true;
+    	    console.log('Found ', n, ' fits in one line at ', found_size, ' pts');
+	    break;
+    	}
+    	// Try it on two lines
+	lines[0] = names.slice(0, names.length - 1).join(' ');
+	lines[1] = names[names.length - 1];
+    	if (doc.getStringUnitWidth(lines[0]) * found_size <= max_twolines_width &&
+	    doc.getStringUnitWidth(lines[1]) * found_size <= max_twolines_width 
+	   ) {
+    	    found_fit = true;
+    	    console.log('Found ', lines, ' fits in two lines at ', found_size, ' pts');
+	    break;
+    	}
+
+	// Try two with dashbreaking
+	if (lines[1].indexOf('-') > -1) {
+	    var hyphenated = lines[1].split(/-/);
+	    lines[0] = lines[0] + ' ' + hyphenated[0] + '-';
+	    lines[1] = hyphenated[1];
+    	    if (doc.getStringUnitWidth(lines[0]) * found_size <= max_twolines_width &&
+		doc.getStringUnitWidth(lines[1]) * found_size <= max_twolines_width 
+	       ) {
+    		found_fit = true;
+    		console.log('Found ', lines, ' fits in two lines at ', found_size, ' pts');
+		break;
+    	    }
+	}
+
+
+    	// Try three lines
+	lines[2] = lines[1];
+	var split_top_line = lines[0].split(/ /);
+
+	lines[0] = split_top_line.slice(0, split_top_line.length - 1).join(' ');
+	lines[1] = split_top_line[split_top_line.length - 1];
+    	if (doc.getStringUnitWidth(lines[0]) * found_size <= max_thirdlines_width &&
+	    doc.getStringUnitWidth(lines[1]) * found_size <= max_middle_line_width_in_pts &&
+	    doc.getStringUnitWidth(lines[2]) * found_size <= max_thirdlines_width 
+	   ) {
+    	    found_fit = true;
+    	    console.log('Found ', lines, ' fits in two lines at ', found_size, ' pts');
+	    break;
+    	}
+
+	// Try three with dashbreaking
+
+    	// Try making it smaller
+    	found_size--;
+    }
+
+    var leading_pts = found_size * 0.2;
+    var line_height_in = (found_size + leading_pts) / ppi;
+
+    for (var i=0; i<lines.length; i++) {
+    	var xoffset = 0 - (doc.getStringUnitWidth(lines[i]) * found_size/ppi / 2);
+
+	// .67 because the full height includes descenders which should drop below center.
+    	var yoffset = (line_height_in * .67) * lines.length/ 2 - (lines.length - 1 - i) * line_height_in;
+    	doc.setFontSize(found_size);
+    	// console.log('offsetting ', n, ' by ', xoffset, 'in from ', centerx);
+    	doc.text(centerx + xoffset, centery + yoffset, lines[i]);
+    }
+
 }
 
 
 drawButtonPDF();
 var PDFstring = doc.output('datauristring');
 $('.preview-pane').attr('src', PDFstring);
-
-// doc.save('rawrr');
-
-// var initDownloadPDF = function() {
-//     $('.download-pdf').click(function(){
-// 	// eval(editor.getValue());
-
-// 	// var file = demos[$('#template').val()];
-// 	// if (file === undefined) {
-// 	//     file = 'demo';
-// 	// }
-// 	var file = 'buttons';
-// 	doc.save(file + '.pdf');
-//     });
-//     return false;
-// };
 
 $(document).ready(function() {
     $('.download-pdf').click(function(){
@@ -93,13 +175,15 @@ $(document).ready(function() {
 
     $('#namefield').bind('input propertychange', function() {
 	console.log("change event");
-			setTimeout(function() {
+	setTimeout(
+	    function() {
 
-	drawButtonPDF();
-	var PDFstring = doc.output('datauristring');
-	$('.preview-pane').attr('src', PDFstring);
-			}
-				   ,0);
+		drawButtonPDF();
+		var PDFstring = doc.output('datauristring');
+		$('.preview-pane').attr('src', PDFstring);
+	    }
+	    ,0
+	);
 
 	
     });
