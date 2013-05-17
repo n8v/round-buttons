@@ -7,12 +7,16 @@ textarea#namefield {
    font-family: helvetica, sans-serif;
    font-size: 18pt;
    line-height: 22pt;
-   width: 45%;
-   max-width: 550;
+   width: 100%;
 }
 
 footer {
    font-size: .8em;
+}
+
+.form-container {
+   width: 45%;
+   max-width: 550;
 }
 
 .preview-container {
@@ -23,7 +27,7 @@ footer {
 }
 
 .download-pdf {
-   padding: 14px;
+   padding: 24px 42px;
 }
 
 
@@ -31,7 +35,7 @@ footer {
    .preview-container {
       width: 95%;
    }   
-   textarea#namefield {
+   .form-container  {
       width: 95%;
    }
 
