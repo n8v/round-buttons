@@ -45,11 +45,14 @@ function drawButtonPDF () {
 		var x = marginsides + circle_radius +
 		    (j * (circle_radius*2 + gutter) );
 	
-// 		// if (i==0) {
-// 		// if (!logo) console.error("nothing in global `logo` var!");
-// 	//	doc.addImage(logo, 'JPEG', x - circle_radius, y - circle_radius, 2.5, 2.5); 
-// //		doc.addSVG(logosvg,  x - circle_radius, y - circle_radius, 2.5, 2.5); 
-// 		// }
+		if (i<4) {
+		    if (!logo) console.error("nothing in global `logo` var!");
+
+		    doc.addImage(logo, 'JPEG', x - circle_radius, y - circle_radius, 2.5, 2.5); 
+
+		    // Too bad, SVG support just not there yet.
+//		doc.addSVG(logosvg,  x - circle_radius, y - circle_radius, 2.5, 2.5); 
+		}
 
 
 		doc.circle(x, y, circle_radius);
@@ -81,12 +84,12 @@ function drawName (centerx, centery, n) {
     doc.setFontSize(max_size);
 
     var names = n.split(/\s+/);
-   // var last_name = names[-1];
 
     var max_middle_line_width_in_pts =  (circle_radius - circle_margin * 2) * 2 * ppi;
     var max_twolines_width = max_middle_line_width_in_pts * .95;
     var max_thirdlines_width = max_middle_line_width_in_pts * .9;
 
+    // This is cool but too simple for our needs.
     // var lines = doc.splitTextToSize(n, max_middle_line_width, {});
     // doc.text(centerx, centery, lines);
 
