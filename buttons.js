@@ -1,4 +1,6 @@
 var doc = [];
+var round_button_cookie = undefined;
+var cookie_name = 'round-name-badge-names';
 
 var margintop = .25;
 var marginsides = .25;
@@ -15,7 +17,8 @@ function drawButtonPDF () {
     doc = new jsPDF('portrait', 'in', 'letter');
     
 
-    var names = $('#namefield').val().split("\n");
+    var names = [];
+    names = $('#namefield').val().split("\n");
 
     // http://stackoverflow.com/questions/281264/remove-empty-elements-from-an-array-in-javascript
     var len = names.length;
@@ -165,11 +168,18 @@ function drawName (centerx, centery, n) {
 }
 
 
-drawButtonPDF();
-var PDFstring = doc.output('datauristring');
-$('.preview-pane').attr('src', PDFstring);
 
 $(document).ready(function() {
+
+    round_button_cookie = $.cookie(cookie_name); 
+    if (round_button_cookie === undefined) {
+	$.cookie(cookie_name, $('#namefield').val(), { expires: 366*2 });
+    }
+    else {
+	$('#namefield').val(round_button_cookie);
+    }
+
+
     $('.download-pdf').click(function(){
 	console.log('hello download pdf click handler');
 	drawButtonPDF();
@@ -180,6 +190,9 @@ $(document).ready(function() {
 	console.log("change event");
 	setTimeout(
 	    function() {
+		console.log('rewriting cookie');
+		$.removeCookie(cookie_name);
+		$.cookie(cookie_name, $('#namefield').val(), { expires: 366*2 });
 
 		drawButtonPDF();
 		var PDFstring = doc.output('datauristring');
@@ -190,5 +203,11 @@ $(document).ready(function() {
 
 	
     });
+
+
+    drawButtonPDF();
+    var PDFstring = doc.output('datauristring');
+    $('.preview-pane').attr('src', PDFstring);
+
 
 });

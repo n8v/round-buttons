@@ -1,6 +1,4 @@
 [submodule "jsPDF"]
 	path = jsPDF
 	url = https://github.com/MrRio/jsPDF.git
-[submodule "jquery-cookie"]
-	path = jquery-cookie
-	url = https://github.com/carhartl/jquery-cookie.git
+
