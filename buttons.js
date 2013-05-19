@@ -80,6 +80,7 @@ function drawName (centerx, centery, n) {
     var max_size = 30;
     var min_size = 18;
     var max_lines = 3;
+    var max_3line_size = 24;
 
     doc.setFontSize(max_size);
 
@@ -132,7 +133,7 @@ function drawName (centerx, centery, n) {
 
 
     	// Try three lines
-	if (lines[0].indexOf(' ') > -1) {
+	if (lines[0].indexOf(' ') > -1 && found_size <= max_3line_size ) {
 	    lines[2] = lines[1];
 	    var split_top_line = lines[0].split(/ /);
 
