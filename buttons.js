@@ -61,7 +61,7 @@ function drawButtonPDF () {
 
 		var n = '';
 		if (n = names.shift()) {
-		    drawName(x, y, n);
+		    drawName(x, y - .1, n);
 		}
 	    }
 	}
@@ -88,7 +88,7 @@ function drawName (centerx, centery, n) {
 
     var max_middle_line_width_in_pts =  (circle_radius - circle_margin * 2) * 2 * ppi;
     var max_twolines_width = max_middle_line_width_in_pts * .95;
-    var max_thirdlines_width = max_middle_line_width_in_pts * .9;
+    var max_thirdlines_width = max_middle_line_width_in_pts * .8;
 
     // This is cool but too simple for our needs.
     // var lines = doc.splitTextToSize(n, max_middle_line_width, {});
@@ -106,47 +106,58 @@ function drawName (centerx, centery, n) {
     	    console.log('Found ', n, ' fits in one line at ', found_size, ' pts');
 	    break;
     	}
-    	// Try it on two lines
-	lines[0] = names.slice(0, names.length - 1).join(' ');
-	lines[1] = names[names.length - 1];
-    	if (doc.getStringUnitWidth(lines[0]) * found_size <= max_twolines_width &&
-	    doc.getStringUnitWidth(lines[1]) * found_size <= max_twolines_width 
-	   ) {
-    	    found_fit = true;
-    	    console.log('Found ', lines, ' fits in two lines at ', found_size, ' pts');
-	    break;
-    	}
 
-	// Try two with dashbreaking
-	if (lines[1].indexOf('-') > -1) {
-	    var hyphenated = lines[1].split(/-/);
-	    lines[0] = lines[0] + ' ' + hyphenated[0] + '-';
+	var hyphenbroken = [];
+	// Try on two lines breaking on dashes
+	if (n.indexOf('-') > -1) {
+	    var hyphenated = n.split(/-/);
+	    lines[0] = hyphenated[0] + "-";
 	    lines[1] = hyphenated[1];
+	    hyphenbroken = lines;
     	    if (doc.getStringUnitWidth(lines[0]) * found_size <= max_twolines_width &&
 		doc.getStringUnitWidth(lines[1]) * found_size <= max_twolines_width 
 	       ) {
     		found_fit = true;
-    		console.log('Found ', lines, ' fits in two lines at ', found_size, ' pts');
+    		// console.log('Found ', lines, ' fits in two lines at ', found_size, ' pts');
 		break;
     	    }
+	}
+	else {
+    	    // Try it on two lines breaking on spaces.
+	    lines[0] = names.slice(0, names.length - 1).join(' ');
+	    lines[1] = names[names.length - 1];
+    	    if (doc.getStringUnitWidth(lines[0]) * found_size <= max_twolines_width &&
+		doc.getStringUnitWidth(lines[1]) * found_size <= max_twolines_width 
+	       ) {
+    		found_fit = true;
+    		// console.log('Found ', lines, ' fits in two lines at ', found_size, ' pts');
+		break;
+    	    }
+
 	}
 
 
     	// Try three lines
-	if (lines[0].indexOf(' ') > -1 && found_size <= max_3line_size ) {
-	    lines[2] = lines[1];
-	    var split_top_line = lines[0].split(/ /);
+	if (found_size <= max_3line_size) {
 
-	    lines[0] = split_top_line.slice(0, split_top_line.length - 1).join(' ');
-	    lines[1] = split_top_line[split_top_line.length - 1];
-    	    if (doc.getStringUnitWidth(lines[0]) * found_size <= max_thirdlines_width &&
-		doc.getStringUnitWidth(lines[1]) * found_size <= max_middle_line_width_in_pts &&
-		doc.getStringUnitWidth(lines[2]) * found_size <= max_thirdlines_width 
-	       ) {
-    		found_fit = true;
-    		console.log('Found ', lines, ' fits in three lines at ', found_size, ' pts');
-		break;
-    	    }
+	    if (hyphenbroken.length > 0) {
+		lines = hyphenbroken;
+	    }
+	    if (lines[0].indexOf(' ') > -1 ) {
+		lines[2] = lines[1];
+		var split_top_line = lines[0].split(/ /);
+
+		lines[0] = split_top_line.slice(0, split_top_line.length - 1).join(' ');
+		lines[1] = split_top_line[split_top_line.length - 1];
+    		if (doc.getStringUnitWidth(lines[0]) * found_size <= max_thirdlines_width &&
+		    doc.getStringUnitWidth(lines[1]) * found_size <= max_middle_line_width_in_pts &&
+		    doc.getStringUnitWidth(lines[2]) * found_size <= max_thirdlines_width 
+		   ) {
+    		    found_fit = true;
+    		    // console.log('Found ', lines, ' fits in three lines at ', found_size, ' pts');
+		    break;
+    		}
+	    }
 	}
 
     	// Try making it smaller
@@ -154,6 +165,7 @@ function drawName (centerx, centery, n) {
     }
 
     var leading_pts = found_size * 0.2;
+    if (lines.length > 2) leading_pts = found_size * 0.1;
     var line_height_in = (found_size + leading_pts) / ppi;
 
     for (var i=0; i<lines.length; i++) {
