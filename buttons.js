@@ -2,15 +2,19 @@ var doc = [];
 var round_button_cookie = undefined;
 var cookie_name = 'round-name-badge-names';
 
-var margintop = .25;
-var marginsides = .25;
-var gutter = .15;
+// page
+var margintop = .5;
+var marginsides = .5;
+var gutter = .25;
 var maxrows = 4;
 var maxcols = 3;
 
-var circle_radius = 2.5/2;
-var circle_margin = .25;
-    
+// circle
+var circle_radius = 2.25/2;
+var circle_margin = .38;
+var bleed_factor = 1.04;
+var img_radius = circle_radius * bleed_factor;
+
 var ppi = 72;
 
 function drawButtonPDF () {
@@ -48,15 +52,21 @@ function drawButtonPDF () {
 		if (i<4) {
 		    if (!logo) console.error("nothing in global `logo` var!");
 
-		    doc.addImage(logo, 'JPEG', x - circle_radius, y - circle_radius, 2.5, 2.5); 
+		    // scale up the image slightly to add a bleed 
+
+
+		    doc.addImage(logo, 'JPEG', x - img_radius, y - img_radius, 
+				 img_radius * 2, img_radius * 2); 
 
 		    // Too bad, SVG support just not there yet.
 //		doc.addSVG(logosvg,  x - circle_radius, y - circle_radius, 2.5, 2.5); 
 		}
 
-
+		doc.setDrawColor(8);
+		doc.setLineWidth(.001);
 		doc.circle(x, y, circle_radius);
 
+		doc.setDrawColor(0);
 
 
 		var n = '';
@@ -77,7 +87,7 @@ function drawButtonPDF () {
 
 function drawName (centerx, centery, n) {
 
-    var max_size = 30;
+    var max_size = 26;
     var min_size = 18;
     var max_lines = 3;
     var max_3line_size = 24;
