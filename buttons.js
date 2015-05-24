@@ -5,14 +5,16 @@ var cookie_name = 'round-name-badge-names';
 // page
 var margintop = .5;
 var marginsides = .5;
-var gutter = .25;
-var maxrows = 4;
-var maxcols = 3;
+var gutter = 1.;
+var maxrows = 3;
+var maxcols = 2;
 
 // circle
-var circle_radius = 2.25/2;
-var circle_margin = .28;
-var bleed_factor = 1.09;
+// VERY IMPORTANT: design should fit in 2.25 in diameter but bleed/margin to 2.75 diameter
+var circle_radius = 2.75/2;
+var design_radius = 2.25/2;
+var circle_margin = .18;
+var bleed_factor = 1.02;
 var img_radius = circle_radius * bleed_factor;
 
 
@@ -69,6 +71,7 @@ function drawButtonPDF () {
 		doc.setLineWidth(.001);
 		doc.circle(x, y, circle_radius);
 
+//		doc.circle(x, y, design_radius);
 		doc.setDrawColor(0);
 
 
@@ -93,7 +96,7 @@ function drawName (centerx, centery, n) {
     var max_size = 26;
     var min_size = 18;
     var max_lines = 3;
-    var max_3line_size = 24;
+    var max_3line_size = 22;
 
     doc.setFontSize(max_size);
 
