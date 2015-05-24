@@ -11,9 +11,12 @@ var maxcols = 3;
 
 // circle
 var circle_radius = 2.25/2;
-var circle_margin = .38;
-var bleed_factor = 1.04;
+var circle_margin = .28;
+var bleed_factor = 1.09;
 var img_radius = circle_radius * bleed_factor;
+
+
+var name_yoffset = .25;
 
 var ppi = 72;
 
@@ -62,7 +65,7 @@ function drawButtonPDF () {
 //		doc.addSVG(logosvg,  x - circle_radius, y - circle_radius, 2.5, 2.5); 
 		}
 
-		doc.setDrawColor(8);
+		doc.setDrawColor(200);
 		doc.setLineWidth(.001);
 		doc.circle(x, y, circle_radius);
 
@@ -185,7 +188,7 @@ function drawName (centerx, centery, n) {
 	var textheight = (lines.length * found_size + (lines.length - 1) * leading_pts)/ppi;
 
 //    	var yoffset = (line_height_in * .67) * lines.length/ 2 - (lines.length - 1 - i) * line_height_in;
-    	var yoffset = 0 + (found_size/ppi * .6) - textheight / 2 + i * line_height_in;
+    	var yoffset = name_yoffset + (found_size/ppi * .6) - textheight / 2 + i * line_height_in;
     	doc.setFontSize(found_size);
     	// console.log('offsetting ', n, ' by ', xoffset, 'in from ', centerx);
     	doc.text(centerx + xoffset, centery + yoffset, lines[i]);
