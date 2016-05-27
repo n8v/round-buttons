@@ -5,7 +5,7 @@ var cookie_name = 'round-name-badge-names';
 // page
 var margintop = .5;
 var marginsides = .5;
-var gutter = 1.;
+var gutter = .5;
 var maxrows = 3;
 var maxcols = 2;
 
