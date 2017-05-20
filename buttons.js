@@ -19,7 +19,7 @@ var img_radius = circle_radius * bleed_factor;
 
 // THIS IS THE FIRST THING TO ADJUST
 // to move the name up (smaller/negative) or down
-var name_yoffset = .025;
+var name_yoffset = .2;
 
 var ppi = 72;
 
